@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantitative Aptitude Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Dark background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #E0E0E0; /* Light text color */
+        }
+
+        .container {
+            width: 70%;
+            max-width: 900px;
+            background-color: #1E1E1E; /* Dark container background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #E0E0E0; /* Light text color */
+        }
+
+        .timer {
+            font-size: 20px;
+            text-align: right;
+            margin-bottom: 20px;
+            color: #FF5722; /* Highlighted timer color */
+        }
+
+        .question {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .answers {
+            margin: 20px 0;
+        }
+
+        .answers input {
+            margin-right: 10px;
+        }
+
+        .answer-option {
+            font-size: 18px;
+            color: #E0E0E0; /* Light text color for answer options */
+        }
+
+        .submit-btn, .next-btn {
+            background-color: #4CAF50; /* Green button color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .submit-btn:hover, .next-btn:hover {
+            background-color: #45a049;
+        }
+
+        .submit-btn:active, .next-btn:active {
+            background-color: #397c38;
+        }
+
+        /* Mobile-friendly */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+
+            .question {
+                font-size: 20px;
+            }
+
+            .answers input {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quantitative Aptitude Exam</h1>
+        
+        <div class="timer">
+            <span id="timer">Time Remaining: 00:30</span>
+        </div>
+
+        <div id="question-container">
+            <div class="question">
+                <p id="question">1. What is the next number in the sequence: 2, 4, 8, 16, ...?</p>
+            </div>
+
+            <div class="answers" id="answers">
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="a"> 32
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="b"> 30
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="c"> 24
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="d"> 20
+                </label>
+            </div>
+
+            <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+
+        <button class="submit-btn" onclick="submitExam()">Submit Exam</button>
+    </div>
+
+    <script>
+        let timerElement = document.getElementById('timer');
+        let timeRemaining = 2 * 60; // 2 minutes in seconds
+        let timerInterval;
+        let currentQuestionIndex = 0;
+
+        const questions = [
+            {
+                question: "What is the next number in the sequence: 2, 4, 8, 16, ...?",
+                options: ["32", "30", "24", "20"],
+                answer: "a"
+            },
+            {
+                question: "What is the sum of 25 + 45 + 70?",
+                options: ["140", "130", "120", "110"],
+                answer: "a"
+            },
+            {
+                question: "If a car travels 60 km in 1 hour, how far will it travel in 5 hours?",
+                options: ["300 km", "350 km", "250 km", "200 km"],
+                answer: "a"
+            },
+            {
+                question: "What is the area of a circle with radius 7 cm?",
+                options: ["154 cm²", "150 cm²", "144 cm²", "140 cm²"],
+                answer: "a"
+            },
+            {
+                question: "If 5x = 25, what is the value of x?",
+                options: ["5", "4", "3", "6"],
+                answer: "a"
+            },
+            {
+                question: "How many sides does a hexagon have?",
+                options: ["6", "5", "7", "8"],
+                answer: "a"
+            },
+            {
+                question: "What is 15% of 200?",
+                options: ["30", "35", "40", "25"],
+                answer: "a"
+            },
+            {
+                question: "What is the square root of 144?",
+                options: ["12", "13", "14", "15"],
+                answer: "a"
+            },
+            {
+                question: "How many liters are in 3 gallons? (1 gallon = 3.785 liters)",
+                options: ["11.355 liters", "12 liters", "10 liters", "15 liters"],
+                answer: "a"
+            },
+            {
+                question: "What is the next number in the series: 10, 20, 40, 80, ...?",
+                options: ["160", "150", "140", "130"],
+                answer: "a"
+            }
+        ];
+
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                timerElement.textContent = `Time Remaining: ${formatTime(minutes)}:${formatTime(seconds)}`;
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Time is up!');
+                }
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function formatTime(time) {
+            return time < 10 ? '0' + time : time;
+        }
+
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                // Store the answer for later review or submission
+                console.log(`Question ${currentQuestionIndex + 1}: ${selectedOption.value}`);
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                alert("You have completed the exam.");
+                // You can add logic here to submit the answers or show the results
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question').textContent = `${currentQuestionIndex + 1}. ${question.question}`;
+            let answersHTML = '';
+            question.options.forEach((option, index) => {
+                answersHTML += `
+                    <label class="answer-option">
+                        <input type="radio" name="answer" value="${String.fromCharCode(97 + index)}"> ${option}
+                    </label><br>
+                `;
+            });
+            document.getElementById('answers').innerHTML = answersHTML;
+        }
+
+        function submitExam() {
+            alert("Your exam has been submitted!");
+            // Implement logic to check answers here and calculate the score
+        }
+
+        window.onload = function() {
+            startTimer();
+            loadQuestion();
+        }
+    </script>
+
+</body>
+</html>

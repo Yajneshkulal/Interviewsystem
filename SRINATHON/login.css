@@ -1,0 +1,218 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Font Settings */
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #E0E0E0;  /* Light text color */
+}
+
+/* Body Styling with Dark Background */
+body {
+    background-image: url('back.jpg'); /* Path to your JPEG image */
+    background-size: cover; /* Ensures the image covers the entire screen */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image on the screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #000000; /* Light text color for readability */
+}
+
+/* Login Container Styling */
+.container {
+    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for contrast */
+    width: 300px;
+}
+
+h2 {
+    text-align: center;
+    color: #FFFFFF;  /* White text color for headings */
+}
+
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    background-color: #333; /* Dark input fields */
+    color: #E0E0E0; /* Light text in input fields */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1C1C1C; /* Dark background */
+    color: white;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section */
+.hero {
+    background: url('') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero-content h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    background-color: #313431;
+    color: rgb(255, 0, 0);
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #45a049;
+}
+
+/* Features Section */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 40px;
+    background-color: #1A1A1A; /* Dark background */
+    text-align: center;
+}
+
+.feature {
+    padding: 20px;
+    background-color: #2A2A2A; /* Dark background for feature boxes */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Darker shadow */
+    border-radius: 10px;
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #E0E0E0; /* Light text color for feature titles */
+}
+
+/* Contact Section */
+.contact {
+    padding: 40px;
+    text-align: center;
+    background-color: #2A2A2A; /* Dark background */
+}
+
+.contact h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #E0E0E0; /* Light text color */
+}
+
+.contact p {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #B0B0B0; /* Slightly lighter text color */
+}
+
+.contact form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.contact form input,
+.contact form textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #333; /* Dark background for input fields */
+    color: #E0E0E0; /* Light text in input fields */
+}
+
+.contact form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.contact form button:hover {
+    background-color: #45a049;
+}
+
+/* Footer */
+footer {
+    background-color: #1C1C1C; /* Dark background */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}

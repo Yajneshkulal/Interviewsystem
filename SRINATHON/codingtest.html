@@ -1,0 +1,202 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #2a2a40;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 1rem;
+            text-align: right;
+            margin-bottom: 20px;
+            color: #f5a623;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            background-color: #3a3a50;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .answers label {
+            display: block;
+            margin: 8px 0;
+            padding: 10px;
+            background-color: #41415e;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .answers label:hover {
+            background-color: #5a5a7a;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .next-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .next-btn:hover {
+            background-color: #45a049;
+        }
+
+        .submit-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #1976D2;
+        }
+
+        @media (max-width: 600px) {
+            .question {
+                font-size: 1rem;
+            }
+
+            .answers label {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Coding Test</h1>
+        <div class="timer" id="timer">Time Remaining: 30:00</div>
+        <div id="question-container">
+            <p class="question" id="question">Question text will appear here.</p>
+            <div class="answers" id="answers"></div>
+        </div>
+        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                question: "Find the error:\n<pre><code>let x = 5;\nif (x = 10) {\n  console.log(\"x is 10\");\n}</code></pre>", 
+                options: ["Missing semicolon", "Incorrect comparison operator", "Undefined variable", "No error"],
+                correctAnswer: 1 // "Incorrect comparison operator"
+            },
+            { 
+                question: "Complete the function:\n<pre><code>function square(num) {\n  return _______;\n}</code></pre>", 
+                options: ["num * 2", "num ** 2", "Math.sqrt(num)", "num * num"], 
+                correctAnswer: 3 // "num * num"
+            },
+            { 
+                question: "Output?\n<pre><code>console.log(\"5\" - 2);</code></pre>", 
+                options: ["3", "52", "NaN", "Error"], 
+                correctAnswer: 0 // "3"
+            },
+            { 
+                question: "Fix the loop:\n<pre><code>for (let i = 0; i < 5; ______) {\n  console.log(i);\n}</code></pre>", 
+                options: ["i++", "i--", "i+", "i+=1"], 
+                correctAnswer: 0 // "i++"
+            },
+            { 
+                question: "Output?\n<pre><code>let a = 5;\nlet b = a++;\nconsole.log(b);</code></pre>", 
+                options: ["4", "5", "6", "undefined"], 
+                correctAnswer: 0 // "4"
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let timeRemaining = 10 * 60;
+        const timerElement = document.getElementById("timer");
+        const selectedAnswers = [];
+
+        function displayQuestion() {
+            const questionContainer = document.getElementById("question");
+            const answersContainer = document.getElementById("answers");
+            questionContainer.innerHTML = questions[currentQuestionIndex].question;
+            answersContainer.innerHTML = questions[currentQuestionIndex].options
+                .map((opt, idx) => `<label><input type='radio' name='answer' value='${idx}'> ${opt}</label>`)
+                .join("");
+        }
+
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                selectedAnswers[currentQuestionIndex] = parseInt(selectedOption.value);
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                } else {
+                    alert("Test completed!");
+                }
+            } else {
+                alert("Please select an answer.");
+            }
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                } else {
+                    alert("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function submitTest() {
+            let score = 0;
+            questions.forEach((question, index) => {
+                if (selectedAnswers[index] === question.correctAnswer) {
+                    score++;
+                }
+            });
+            alert(`Test submitted! Your score is: ${score} / ${questions.length}`);
+        }
+
+        window.onload = () => {
+            startTimer();
+            displayQuestion();
+        };
+    </script>
+</body>
+</html>

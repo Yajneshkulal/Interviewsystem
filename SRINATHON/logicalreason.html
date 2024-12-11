@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logical Reasoning Test</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #121212; color: #E0E0E0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: #1F1F1F; color: white; padding: 20px; text-align: center; }
+        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .question-container { text-align: center; background: #2A2A2A; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); max-width: 600px; width: 90%; }
+        .question { font-size: 1.2rem; margin-bottom: 15px; }
+        .answers label { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background: #333; color: #E0E0E0; cursor: pointer; }
+        .answers label:hover { background: #444; }
+        .timer { font-size: 1rem; color: #F54242; margin: 10px 0; }
+        .btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 5px; cursor: pointer; margin: 10px; }
+        .btn:hover { background: #45a049; }
+        .btn:disabled { background: #777; cursor: not-allowed; }
+        footer { text-align: center; padding: 10px; background: #333; color: white; }
+        .score-container { display: none; text-align: center; color: #F54242; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header><h1>Logical Reasoning Test</h1></header>
+    <main>
+        <div class="question-container">
+            <div class="timer" id="timer">Time Remaining: 30:00</div>
+            <div id="question-area">
+                <p class="question" id="question-text">What comes next in the series: 2, 4, 8, 16, ...?</p>
+                <div class="answers" id="answers">
+                    <label><input type="radio" name="answer" value="a"> 32</label>
+                    <label><input type="radio" name="answer" value="b"> 24</label>
+                    <label><input type="radio" name="answer" value="c"> 64</label>
+                    <label><input type="radio" name="answer" value="d"> 48</label>
+                </div>
+            </div>
+            <button class="btn" id="next-btn" onclick="nextQuestion()">Next</button>
+            <button class="btn" id="submit-btn" onclick="submitTest()" disabled>Submit</button>
+            <button class="btn" onclick="goBack()">Return to Previous Page</button> <!-- New back button -->
+        </div>
+        <div class="score-container" id="score-container">
+            <p>Your Score: <span id="score"></span></p>
+        </div>
+    </main>
+    <footer><p>&copy; 2024 Logical Reasoning Test. All rights reserved.</p></footer>
+
+    <script>
+        const questions = [
+            { question: "What comes next in the series: 2, 4, 8, 16, ...?", options: ["32", "24", "64", "48"], correctAnswer: "a" },
+            { question: "If all bloops are razzies and all razzies are lazzies, are all bloops definitely lazzies?", options: ["Yes", "No", "Can't Say", "None"], correctAnswer: "a" },
+            { question: "Which of the following is an odd one out?", options: ["Circle", "Square", "Triangle", "Hexagon"], correctAnswer: "a" },
+            { question: "What is the angle sum of a triangle?", options: ["90°", "120°", "180°", "360°"], correctAnswer: "c" },
+            { question: "If A is older than B, and B is older than C, who is the youngest?", options: ["A", "B", "C", "None"], correctAnswer: "c" },
+            { question: "Rearrange the letters 'RACT' to form a word.", options: ["ACTOR", "CART", "TRACE", "NONE"], correctAnswer: "b" },
+            { question: "What is the next prime number after 7?", options: ["9", "11", "13", "17"], correctAnswer: "b" },
+            { question: "Which number is a Fibonacci number?", options: ["12", "21", "34", "55"], correctAnswer: "c" },
+            { question: "If 5 cats catch 5 rats in 5 minutes, how many cats are needed to catch 100 rats in 100 minutes?", options: ["5", "10", "20", "25"], correctAnswer: "a" },
+            { question: "Find the missing letter in the sequence: A, C, E, __, I.", options: ["G", "H", "J", "F"], correctAnswer: "b" },
+        ];
+
+        let currentQuestionIndex = 0;
+        let timeRemaining = 2 * 60;  // 2 minutes
+        let score = 0;
+        let answers = [];
+
+        function startTimer() {
+            setInterval(() => {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    document.getElementById('timer').textContent = `Time Remaining: ${formatTime(minutes)}:${formatTime(seconds)}`;
+                } else {
+                    alert('Time is up!');
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function formatTime(time) {
+            return time < 10 ? `0${time}` : time;
+        }
+
+        function nextQuestion() {
+            const answerOptions = document.querySelectorAll('input[name="answer"]');
+            let selected = false;
+            let selectedAnswer = null;
+            answerOptions.forEach(option => {
+                if (option.checked) {
+                    selected = true;
+                    selectedAnswer = option.value;
+                }
+            });
+
+            if (!selected) {
+                alert('Please select an answer before proceeding.');
+                return;
+            }
+
+            // Save the answer for the current question
+            answers[currentQuestionIndex] = selectedAnswer;
+
+            // Check if the selected answer is correct
+            if (selectedAnswer === questions[currentQuestionIndex].correctAnswer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('next-btn').disabled = true;
+                document.getElementById('submit-btn').disabled = false;
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = question.question;
+            const answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+            question.options.forEach((option, index) => {
+                answersDiv.innerHTML += `<label><input type="radio" name="answer" value="${String.fromCharCode(97 + index)}"> ${option}</label>`;
+            });
+        }
+
+        function submitTest() {
+            const answerOptions = document.querySelectorAll('input[name="answer"]');
+            answerOptions.forEach(option => option.disabled = true);  // Disable all options after submission
+
+            document.getElementById('submit-btn').disabled = true;
+
+            // Show the score
+            document.getElementById('score').textContent = `${score} / ${questions.length}`;
+            document.getElementById('score-container').style.display = 'block';
+        }
+
+        function goBack() {
+            window.history.back(); // Goes to the previous page in the browser history
+        }
+
+        window.onload = () => {
+            loadQuestion();
+            startTimer();
+        };
+    </script>
+</body>
+</html>

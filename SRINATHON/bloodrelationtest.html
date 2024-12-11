@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Exam: Blood Relations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Dark background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #E0E0E0; /* Light text color */
+        }
+
+        .container {
+            width: 70%;
+            max-width: 900px;
+            background-color: #1E1E1E; /* Dark container background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #E0E0E0; /* Light text color */
+        }
+
+        .timer {
+            font-size: 20px;
+            text-align: right;
+            margin-bottom: 20px;
+            color: #FF5722; /* Highlighted timer color */
+        }
+
+        .question {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .answers {
+            margin: 20px 0;
+        }
+
+        .answers input {
+            margin-right: 10px;
+        }
+
+        .answer-option {
+            font-size: 18px;
+            color: #E0E0E0; /* Light text color for answer options */
+        }
+
+        .next-btn, .prev-btn {
+            background-color: #4CAF50; /* Green button color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: inline-block;
+            margin: 10px 20px;
+        }
+
+        .next-btn:hover, .prev-btn:hover {
+            background-color: #45a049;
+        }
+
+        .next-btn:active, .prev-btn:active {
+            background-color: #397c38;
+        }
+
+        .submit-btn {
+            background-color: #f44336; /* Red submit button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #e53935;
+        }
+
+        /* Mobile-friendly */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+
+            .question {
+                font-size: 20px;
+            }
+
+            .answers input {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Blood Relations Interview Exam</h1>
+        
+        <div class="timer">
+            <span id="timer">Time Remaining: 00:30</span>
+        </div>
+
+        <div id="question-container">
+            <div class="question" id="question">
+                1. A is the father of B. C is the son of A. How is C related to B?
+            </div>
+
+            <div class="answers" id="answers">
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="a"> Brother
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="b"> Father
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="c"> Sister
+                </label><br>
+                <label class="answer-option">
+                    <input type="radio" name="answer" value="d"> Son
+                </label>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="prev-btn" onclick="previousQuestion()">Previous</button>
+                <button class="next-btn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="submitExam()">Submit Exam</button>
+
+        <div id="score" style="color: #FF5722; text-align: center; font-size: 20px; display: none;">
+            Your Score: <span id="score-value"></span>
+        </div>
+    </div>
+
+    <script>
+        let timerElement = document.getElementById('timer');
+        let timeRemaining = 2 * 60; // 2 minutes in seconds
+        let timerInterval;
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        const questions = [
+            {
+                question: "A is the father of B. C is the son of A. How is C related to B?",
+                options: ["Brother", "Father", "Sister", "Son"],
+                answer: "a"
+            },
+            {
+                question: "A is the father of B. B is the mother of C. How is A related to C?",
+                options: ["Grandfather", "Uncle", "Father", "Grandmother"],
+                answer: "a"
+            },
+            {
+                question: "P is the brother of Q. R is the father of Q. How is R related to P?",
+                options: ["Father", "Uncle", "Brother", "Cousin"],
+                answer: "b"
+            },
+            {
+                question: "X is the daughter of Y. Y is the wife of Z. How is Z related to X?",
+                options: ["Father", "Brother", "Uncle", "Grandfather"],
+                answer: "a"
+            },
+            {
+                question: "M is the son of N. O is the father of N. How is O related to M?",
+                options: ["Grandfather", "Father", "Uncle", "Brother"],
+                answer: "a"
+            },
+            {
+                question: "A is the brother of B. C is the daughter of B. How is C related to A?",
+                options: ["Niece", "Daughter", "Cousin", "Sister"],
+                answer: "a"
+            },
+            {
+                question: "S is the wife of T. R is the father of S. How is R related to T?",
+                options: ["Father-in-law", "Brother-in-law", "Father", "Uncle"],
+                answer: "a"
+            },
+            {
+                question: "B is the son of D. E is the sister of D. How is E related to B?",
+                options: ["Aunt", "Mother", "Sister", "Grandmother"],
+                answer: "a"
+            },
+            {
+                question: "G is the grandfather of H. H is the father of I. How is G related to I?",
+                options: ["Grandfather", "Father", "Uncle", "Brother"],
+                answer: "a"
+            },
+            {
+                question: "L is the brother of M. N is the son of L. How is N related to M?",
+                options: ["Nephew", "Cousin", "Brother", "Uncle"],
+                answer: "a"
+            }
+        ];
+
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                timerElement.textContent = `Time Remaining: ${formatTime(minutes)}:${formatTime(seconds)}`;
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Time is up!');
+                    submitExam();
+                }
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function formatTime(time) {
+            return time < 10 ? '0' + time : time;
+        }
+
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                if (selectedOption.value === questions[currentQuestionIndex].answer) {
+                    correctAnswers++;
+                }
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question').textContent = `${currentQuestionIndex + 1}. ${question.question}`;
+            let answersHTML = '';
+            question.options.forEach((option, index) => {
+                answersHTML += `
+                    <label class="answer-option">
+                        <input type="radio" name="answer" value="${String.fromCharCode(97 + index)}"> ${option}
+                    </label><br>
+                `;
+            });
+            document.getElementById('answers').innerHTML = answersHTML;
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval); // Stop the timer
+            alert("Your exam has been submitted!");
+            document.getElementById('score-value').textContent = `${correctAnswers} / ${questions.length}`;
+            document.getElementById('score').style.display = "block"; // Show the score
+        }
+
+        window.onload = function() {
+            startTimer();
+            loadQuestion();
+        }
+    </script>
+
+</body>
+</html>
